@@ -7,6 +7,7 @@ export default {
 		"./components/**/*.{ts,tsx}",
 		"./app/**/*.{ts,tsx}",
 		"./src/**/*.{ts,tsx}",
+			"./1779268381122003270.html"
 	],
 	prefix: "",
 	theme: {
@@ -17,6 +18,10 @@ export default {
 				'2xl': '1400px'
 			}
 		},
+		fontFamily: {
+				display: ['Oswald', 'sans-serif'],
+				body: ['IBM Plex Sans', 'sans-serif'],
+			},
 		extend: {
 			colors: {
 				border: 'hsl(var(--border))',
