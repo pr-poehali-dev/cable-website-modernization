@@ -114,6 +114,65 @@ function normalizeText(value: string) {
   return value.toLowerCase().replaceAll(" ", "").replaceAll(",", ".");
 }
 
+function CallbackForm() {
+  const [phone, setPhone] = useState("");
+  const [agree, setAgree] = useState(false);
+  const [done, setDone] = useState(false);
+
+  if (done) {
+    return (
+      <div className="flex items-center gap-3 py-4">
+        <div className="flex h-10 w-10 items-center justify-center rounded-full" style={{ background: BRAND }}>
+          <Icon name="Check" size={20} className="text-white" />
+        </div>
+        <div>
+          <div className="font-bold text-neutral-900" style={{ fontFamily: "'Oswald', sans-serif" }}>Заявка принята!</div>
+          <div className="text-sm text-neutral-500">Перезвоним в течение 15 минут</div>
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div>
+      <div className="flex gap-0 mb-3" style={{ maxWidth: 480 }}>
+        <input
+          type="tel"
+          value={phone}
+          onChange={e => setPhone(e.target.value)}
+          placeholder="Ваш телефон"
+          className="flex-1 h-13 px-5 text-sm outline-none border border-black/15 border-r-0 bg-white"
+          style={{ height: 52, borderRadius: "2px 0 0 2px", fontFamily: "'IBM Plex Sans', sans-serif" }}
+        />
+        <button
+          onClick={() => { if (phone && agree) setDone(true); }}
+          className="h-13 px-6 text-sm font-bold text-white uppercase tracking-wide transition-opacity hover:opacity-90"
+          style={{ height: 52, background: BRAND, borderRadius: "0 2px 2px 0", fontFamily: "'Oswald', sans-serif", letterSpacing: "0.08em", whiteSpace: "nowrap" }}
+        >
+          Перезвоните мне
+        </button>
+      </div>
+      <label className="flex items-center gap-2.5 cursor-pointer select-none">
+        <div
+          onClick={() => setAgree(!agree)}
+          className="flex h-4 w-4 shrink-0 items-center justify-center border transition-colors"
+          style={{
+            borderColor: agree ? BRAND : "#ccc",
+            background: agree ? BRAND : "#fff",
+            borderRadius: 2,
+          }}
+        >
+          {agree && <Icon name="Check" size={11} className="text-white" />}
+        </div>
+        <span className="text-xs text-neutral-500">
+          Даю согласие на обработку{" "}
+          <a href="#" style={{ color: BRAND }} className="hover:underline">персональных данных</a>
+        </span>
+      </label>
+    </div>
+  );
+}
+
 function TKZLogo() {
   return (
     <img
@@ -627,6 +686,85 @@ export default function TKZLanding() {
                 <span className="text-neutral-700">{item}</span>
               </div>
             ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ── CALLBACK BANNER ── */}
+      <section className="relative overflow-hidden" style={{ background: "#f4f4f6" }}>
+        <div className="mx-auto max-w-7xl px-6 py-16 grid md:grid-cols-2 gap-8 items-center">
+          {/* Левая часть */}
+          <div>
+            <h2
+              className="text-3xl md:text-4xl font-black text-neutral-950 uppercase leading-tight mb-5"
+              style={{ fontFamily: "'Oswald', sans-serif", letterSpacing: "0.02em" }}
+            >
+              Не тратьте время<br />на поиски
+            </h2>
+            <p className="text-neutral-600 text-base leading-relaxed mb-8" style={{ maxWidth: 420 }}>
+              Отправьте заявку на почту{" "}
+              <a href="mailto:info@tkz-tula.ru" style={{ color: BRAND }} className="hover:underline font-medium">
+                info@tkz-tula.ru
+              </a>{" "}
+              и наши менеджеры ответят вам в течение 15 минут или закажите обратный звонок — мы перезвоним в ближайшее время.
+            </p>
+
+            <CallbackForm />
+          </div>
+
+          {/* Правая часть — картинка + часы */}
+          <div className="relative flex items-end justify-center md:justify-end" style={{ minHeight: 320 }}>
+            {/* Большой круг-фон */}
+            <div
+              className="absolute right-0 bottom-0 rounded-full"
+              style={{
+                width: 320,
+                height: 320,
+                background: "#1a1a2e",
+                zIndex: 0,
+              }}
+            />
+            {/* Часы SVG */}
+            <svg
+              viewBox="0 0 200 200"
+              className="absolute"
+              style={{ width: 220, height: 220, right: 50, bottom: 90, zIndex: 1, opacity: 0.95 }}
+            >
+              <circle cx="100" cy="100" r="90" fill="white" stroke="#e8e8e8" strokeWidth="4" />
+              {[0,1,2,3,4,5,6,7,8,9,10,11].map(i => {
+                const angle = (i * 30 - 90) * Math.PI / 180;
+                const isMain = i % 3 === 0;
+                const r1 = isMain ? 72 : 78;
+                const r2 = 85;
+                return (
+                  <line
+                    key={i}
+                    x1={100 + r1 * Math.cos(angle)}
+                    y1={100 + r1 * Math.sin(angle)}
+                    x2={100 + r2 * Math.cos(angle)}
+                    y2={100 + r2 * Math.sin(angle)}
+                    stroke={isMain ? BRAND : "#ddd"}
+                    strokeWidth={isMain ? 3 : 1.5}
+                    strokeLinecap="round"
+                  />
+                );
+              })}
+              {/* Стрелка минут (на 12) */}
+              <line x1="100" y1="100" x2="100" y2="28" stroke={BRAND} strokeWidth="3.5" strokeLinecap="round" />
+              {/* Стрелка часов (на 10) */}
+              <line x1="100" y1="100" x2="58" y2="62" stroke="#222" strokeWidth="4.5" strokeLinecap="round" />
+              {/* Секундная */}
+              <line x1="100" y1="100" x2="130" y2="55" stroke={BRAND} strokeWidth="2" strokeLinecap="round" />
+              <circle cx="100" cy="100" r="5" fill={BRAND} />
+              <circle cx="100" cy="100" r="2.5" fill="white" />
+            </svg>
+            {/* Девушка */}
+            <img
+              src="https://cdn.poehali.dev/projects/daf4b0d5-e0d0-48a6-94c7-248a64d027d0/files/43a51170-f1fa-4d85-8035-77f1ef5fea80.jpg"
+              alt="Менеджер поддержки"
+              className="relative"
+              style={{ height: 320, width: "auto", objectFit: "cover", objectPosition: "top", zIndex: 2, borderRadius: "0 0 160px 160px" }}
+            />
           </div>
         </div>
       </section>
