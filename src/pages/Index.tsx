@@ -408,7 +408,7 @@ export default function TKZLanding() {
             style={{
               background: "#fcfcfc",
               maxHeight: scrolled ? 0 : 48,
-              overflow: "hidden",
+              overflow: scrolled ? "hidden" : "visible",
               transition: "max-height 0.3s ease",
             }}
           >
@@ -449,10 +449,10 @@ export default function TKZLanding() {
                   {/* Дропдаун */}
                   {openMenu === label && (
                     <div
-                      className="absolute left-0 top-full z-50 min-w-[260px] overflow-hidden"
+                      className="absolute left-0 top-full z-[100] min-w-[260px]"
                       style={{
                         background: "#fff",
-                        boxShadow: "0 8px 32px rgba(0,0,0,0.13)",
+                        boxShadow: "0 8px 40px rgba(0,0,0,0.15)",
                         border: "1px solid rgba(0,0,0,0.08)",
                         borderTop: `2px solid ${BRAND}`,
                         borderRadius: "0 0 6px 6px",
