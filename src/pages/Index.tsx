@@ -91,26 +91,93 @@ export default function TKZLanding() {
     <div className="min-h-screen bg-white text-neutral-950" style={{ fontFamily: "'IBM Plex Sans', sans-serif" }}>
 
       {/* ── HEADER ── */}
-      <header className="sticky top-0 z-50 border-b border-black/10 bg-white/95 backdrop-blur-xl">
-        <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-4">
-          <div className="flex items-center gap-3">
-            <TKZLogo />
+      <header className="sticky top-0 z-50 bg-white shadow-sm">
+        {/* Верхняя строка */}
+        <div className="border-b border-black/8 bg-white">
+          <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-1.5">
+            <nav className="hidden items-center gap-6 text-xs text-neutral-600 md:flex">
+              {[["#about","О компании"],["#production","Производство"],["#quality","Сертификаты"],["#dealers","Дилерам"]].map(([href, label]) => (
+                <a key={href} href={href} className="hover:text-[#F25A29] transition-colors">{label}</a>
+              ))}
+            </nav>
+            <div className="flex items-center gap-5 ml-auto">
+              <a href="#contacts" className="flex items-center gap-1.5 text-xs text-neutral-600 hover:text-[#F25A29] transition-colors">
+                <Icon name="MapPin" size={13} className="text-[#F25A29]" />
+                Тула
+              </a>
+              <a href="#contacts" className="text-xs font-semibold transition-colors" style={{ color: BRAND }}>
+                Заказать звонок
+              </a>
+            </div>
           </div>
+        </div>
 
-          <nav className="hidden items-center gap-7 text-sm font-medium text-neutral-600 md:flex">
-            {[["#products","Продукция"],["#catalog","Каталог"],["#production","Производство"],["#quality","Качество"],["#dealers","Дилерам"],["#contacts","Контакты"]].map(([href, label]) => (
-              <a key={href} href={href} className="hover:text-[#F25A29] transition-colors">{label}</a>
+        {/* Основная строка */}
+        <div className="border-b border-black/8 bg-white">
+          <div className="mx-auto flex max-w-7xl items-center gap-4 px-6 py-3">
+            {/* Логотип */}
+            <a href="/" className="shrink-0">
+              <TKZLogo />
+            </a>
+
+            {/* Кнопка каталога */}
+            <a href="#catalog">
+              <Button className="flex shrink-0 items-center gap-2 rounded-none px-5 py-3 text-sm font-bold text-white uppercase tracking-wide" style={{ background: BRAND, fontFamily: "'Oswald', sans-serif" }}>
+                <Icon name="Menu" size={16} />
+                Каталог
+              </Button>
+            </a>
+
+            {/* Поиск */}
+            <div className="relative flex-1 max-w-xl">
+              <input
+                className="h-11 w-full border border-black/15 bg-white pl-4 pr-11 text-sm outline-none transition-colors focus:border-[#F25A29]"
+                placeholder="Поиск по каталогу"
+              />
+              <button className="absolute right-0 top-0 flex h-11 w-11 items-center justify-center border-l border-black/15 text-neutral-500 hover:text-[#F25A29] transition-colors">
+                <Icon name="Search" size={17} />
+              </button>
+            </div>
+
+            {/* Телефон и корзина */}
+            <div className="ml-auto hidden shrink-0 items-center gap-5 md:flex">
+              <div className="text-right">
+                <div className="text-lg font-black text-neutral-950" style={{ fontFamily: "'Oswald', sans-serif", letterSpacing: "-0.02em" }}>
+                  +7 (4872) 00-00-00
+                </div>
+                <a href="mailto:info@tkz-tula.ru" className="text-xs transition-colors hover:text-[#F25A29]" style={{ color: BRAND }}>
+                  info@tkz-tula.ru
+                </a>
+              </div>
+              <a href="#order" className="relative flex h-10 w-10 items-center justify-center rounded-full border border-black/15 text-neutral-600 hover:border-[#F25A29] hover:text-[#F25A29] transition-colors">
+                <Icon name="ShoppingCart" size={18} />
+                <span className="absolute -right-1 -top-1 flex h-4 w-4 items-center justify-center rounded-full text-[10px] font-bold text-white" style={{ background: BRAND }}>0</span>
+              </a>
+            </div>
+          </div>
+        </div>
+
+        {/* Нижняя строка — категории */}
+        <div className="hidden border-b border-black/8 bg-white md:block">
+          <div className="mx-auto flex max-w-7xl items-center gap-0 px-6">
+            {[
+              "Силовые кабели",
+              "Плоские кабели",
+              "Гибкие провода",
+              "Монтажный провод",
+              "Соединительные шнуры",
+              "Спецкабели",
+            ].map((cat) => (
+              <a
+                key={cat}
+                href="#catalog"
+                className="flex items-center gap-1.5 border-r border-black/8 px-4 py-3 text-xs font-medium text-neutral-600 hover:bg-orange-50 hover:text-[#F25A29] transition-colors first:pl-0"
+              >
+                {cat}
+                <Icon name="ChevronDown" size={12} className="text-neutral-400" />
+              </a>
             ))}
-          </nav>
-
-          <Button
-            className="rounded-2xl text-white"
-            style={{ background: BRAND }}
-            onMouseEnter={e => (e.currentTarget.style.background = BRAND_HOVER)}
-            onMouseLeave={e => (e.currentTarget.style.background = BRAND)}
-          >
-            Запросить КП
-          </Button>
+          </div>
         </div>
       </header>
 
