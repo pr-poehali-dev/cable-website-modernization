@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useMemo, useState, useEffect } from "react";
 import Icon from "@/components/ui/icon";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -189,6 +189,13 @@ export default function TKZLanding() {
   const [formData, setFormData] = useState({ name: "", phone: "", company: "" });
   const [submitted, setSubmitted] = useState(false);
   const [openMenu, setOpenMenu] = useState<string | null>(null);
+  const [scrolled, setScrolled] = useState(false);
+
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 60);
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
 
   const catalogGroups = useMemo(
     () => ["Все", ...Array.from(new Set(catalog.map((item) => item.category)))],
@@ -216,8 +223,15 @@ export default function TKZLanding() {
       {/* ── HEADER ── */}
       <header className="sticky top-0 z-50" style={{ fontFamily: "'IBM Plex Sans', sans-serif" }}>
 
-        {/* Верхняя полоса */}
-        <div style={{ background: "#1a1a1a" }}>
+        {/* Верхняя тёмная полоса — скрывается при скролле */}
+        <div
+          style={{
+            background: "#1a1a1a",
+            maxHeight: scrolled ? 0 : 40,
+            overflow: "hidden",
+            transition: "max-height 0.3s ease",
+          }}
+        >
           <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-2">
             <nav className="hidden items-center gap-1 md:flex">
               {[["#about","О компании"],["#production","Производство"],["#quality","Сертификаты"],["#dealers","Дилерам"],["#contacts","Контакты"]].map(([href, label]) => (
@@ -233,101 +247,171 @@ export default function TKZLanding() {
                 г. Тула
               </a>
               <div className="w-px h-3 bg-white/20" />
-              <a href="tel:+74872000000"
-                className="flex items-center gap-1.5 text-xs font-semibold text-white/80 hover:text-white transition-colors">
+              <a href="tel:+74872000000" className="flex items-center gap-1.5 text-xs font-semibold text-white/80 hover:text-white transition-colors">
                 <Icon name="Phone" size={12} className="text-[#F25A29]" />
                 +7 (4872) 00-00-00
               </a>
               <div className="w-px h-3 bg-white/20" />
-              <a href="#contacts"
-                className="text-xs font-semibold px-3 py-1 rounded transition-colors"
-                style={{ color: BRAND }}
-                onMouseEnter={e => (e.currentTarget.style.color = "#ff7a55")}
-                onMouseLeave={e => (e.currentTarget.style.color = BRAND)}>
+              <a href="#contacts" className="text-xs font-semibold px-3 py-1 rounded transition-colors" style={{ color: BRAND }}>
                 Заказать звонок →
               </a>
             </div>
           </div>
         </div>
 
-        {/* Основная строка */}
-        <div className="bg-white border-b border-black/10" style={{ boxShadow: "0 2px 16px rgba(0,0,0,0.07)" }}>
-          <div className="mx-auto flex max-w-7xl items-center gap-5 px-6 py-3.5">
-
+        {/* Основная строка — всегда видна, компактнее при скролле */}
+        <div
+          className="bg-white border-b border-black/10"
+          style={{
+            boxShadow: scrolled ? "0 4px 24px rgba(0,0,0,0.12)" : "0 2px 16px rgba(0,0,0,0.07)",
+            transition: "box-shadow 0.3s ease",
+          }}
+        >
+          <div
+            className="mx-auto flex max-w-7xl items-center gap-5 px-6"
+            style={{
+              paddingTop: scrolled ? 8 : 14,
+              paddingBottom: scrolled ? 8 : 14,
+              transition: "padding 0.3s ease",
+            }}
+          >
             {/* Логотип */}
             <a href="/" className="shrink-0 mr-1">
-              <TKZLogo />
+              <img
+                src="https://cdn.poehali.dev/projects/daf4b0d5-e0d0-48a6-94c7-248a64d027d0/bucket/7078d90e-4ce4-40e8-be39-d18583b96837.png"
+                alt="ТКЗ"
+                style={{
+                  height: scrolled ? 36 : 48,
+                  width: "auto",
+                  objectFit: "contain",
+                  transition: "height 0.3s ease",
+                }}
+              />
             </a>
 
-            {/* Кнопка каталога */}
-            <a href="#catalog" className="shrink-0">
+            {/* Кнопка меню/каталога */}
+            <div className="relative shrink-0">
               <button
-                className="flex items-center gap-2.5 px-5 h-12 text-sm font-bold text-white uppercase tracking-widest transition-all duration-150 hover:opacity-90 active:scale-95"
-                style={{ background: BRAND, fontFamily: "'Oswald', sans-serif", letterSpacing: "0.12em" }}
+                className="flex items-center gap-2.5 text-sm font-bold text-white uppercase transition-all duration-150 hover:opacity-90"
+                style={{
+                  background: BRAND,
+                  fontFamily: "'Oswald', sans-serif",
+                  letterSpacing: "0.1em",
+                  paddingLeft: 18,
+                  paddingRight: 18,
+                  height: scrolled ? 40 : 48,
+                  transition: "height 0.3s ease",
+                }}
+                onClick={() => setOpenMenu(openMenu === "__main__" ? null : "__main__")}
               >
-                <Icon name="LayoutGrid" size={16} />
-                Каталог
+                <Icon name="Menu" size={16} />
+                Меню
+                <Icon name="ChevronDown" size={13} style={{ transform: openMenu === "__main__" ? "rotate(180deg)" : "rotate(0)", transition: "transform 0.2s" }} />
               </button>
-            </a>
+
+              {/* Выпадающее главное меню */}
+              {openMenu === "__main__" && (
+                <div
+                  className="absolute left-0 top-full z-50 min-w-[240px]"
+                  style={{
+                    background: "#fff",
+                    boxShadow: "0 8px 32px rgba(0,0,0,0.15)",
+                    border: "1px solid rgba(0,0,0,0.08)",
+                    borderTop: `3px solid ${BRAND}`,
+                  }}
+                  onMouseLeave={() => setOpenMenu(null)}
+                >
+                  {[
+                    { label: "Каталог продукции", href: "#catalog", accent: true, icon: "LayoutGrid" },
+                    { label: "О компании",         href: "#about",    icon: "Building2" },
+                    { label: "Производство",        href: "#production", icon: "Factory" },
+                    { label: "Сертификаты",         href: "#quality",  icon: "ShieldCheck" },
+                    { label: "Дилерам",             href: "#dealers",  icon: "Handshake" },
+                    { label: "Контакты",            href: "#contacts", icon: "Phone" },
+                  ].map(({ label, href, accent, icon }) => (
+                    <a
+                      key={label}
+                      href={href}
+                      onClick={() => setOpenMenu(null)}
+                      className="flex items-center gap-3 px-5 py-3 text-sm font-medium transition-colors hover:bg-orange-50 border-b border-black/5 last:border-0"
+                      style={{ color: accent ? BRAND : "#333", fontWeight: accent ? 700 : 500 }}
+                    >
+                      <Icon name={icon} size={15} style={{ color: accent ? BRAND : "#aaa" }} />
+                      {label}
+                      {accent && <Icon name="ArrowRight" size={13} className="ml-auto" style={{ color: BRAND }} />}
+                    </a>
+                  ))}
+                </div>
+              )}
+            </div>
 
             {/* Поиск */}
-            <div className="relative flex-1" style={{ maxWidth: 520 }}>
+            <div className="relative flex-1" style={{ maxWidth: 500 }}>
+              <Icon name="Search" size={16} className="absolute left-4 top-1/2 -translate-y-1/2 text-neutral-400" />
               <input
-                className="h-12 w-full text-sm outline-none transition-all pl-5 pr-14"
+                className="w-full text-sm outline-none pl-11 pr-5"
                 style={{
                   border: "1.5px solid #e5e5e5",
                   borderRadius: 2,
                   background: "#fafafa",
                   color: "#111",
+                  height: scrolled ? 40 : 48,
+                  transition: "height 0.3s ease",
                 }}
                 onFocus={e => (e.currentTarget.style.borderColor = BRAND)}
                 onBlur={e => (e.currentTarget.style.borderColor = "#e5e5e5")}
                 placeholder="Поиск по каталогу: ВВГ 3х2,5, ПВС..."
               />
-              <button
-                className="absolute right-0 top-0 h-12 w-12 flex items-center justify-center text-white transition-opacity hover:opacity-90"
-                style={{ background: BRAND, borderRadius: "0 2px 2px 0" }}
-              >
-                <Icon name="Search" size={17} />
-              </button>
             </div>
 
             {/* Правый блок */}
-            <div className="ml-auto flex shrink-0 items-center gap-6">
+            <div className="ml-auto flex shrink-0 items-center gap-5">
+              {/* Email — скрывается при скролле */}
+              {!scrolled && (
+                <a href="mailto:info@tkz-tula.ru" className="hidden lg:flex items-center gap-2 text-sm text-neutral-600 hover:text-[#F25A29] transition-colors">
+                  <Icon name="Mail" size={15} className="text-[#F25A29]" />
+                  info@tkz-tula.ru
+                </a>
+              )}
+
               {/* Телефон */}
               <div className="hidden lg:block text-right">
                 <a href="tel:+74872000000"
-                  className="block text-xl font-black text-neutral-950 hover:text-[#F25A29] transition-colors leading-tight"
-                  style={{ fontFamily: "'Oswald', sans-serif", letterSpacing: "-0.01em" }}>
+                  className="block font-black text-neutral-950 hover:text-[#F25A29] transition-colors leading-tight"
+                  style={{
+                    fontFamily: "'Oswald', sans-serif",
+                    fontSize: scrolled ? 16 : 20,
+                    transition: "font-size 0.3s ease",
+                  }}>
                   +7 (4872) 00-00-00
                 </a>
-                <a href="mailto:info@tkz-tula.ru"
-                  className="text-xs transition-colors"
-                  style={{ color: BRAND }}>
-                  info@tkz-tula.ru
-                </a>
+                {!scrolled && (
+                  <a href="#contacts" className="text-xs" style={{ color: BRAND }}>
+                    Заказать обратный звонок
+                  </a>
+                )}
               </div>
 
-              {/* Разделитель */}
-              <div className="hidden lg:block w-px h-10 bg-black/10" />
+              <div className="hidden lg:block w-px h-8 bg-black/10" />
 
-              {/* Кнопка заявки */}
-              <a href="#dealers">
-                <button
-                  className="hidden lg:flex items-center gap-2 h-11 px-5 text-sm font-semibold border-2 transition-all duration-150 hover:text-white"
-                  style={{ borderColor: BRAND, color: BRAND, borderRadius: 2 }}
-                  onMouseEnter={e => { (e.currentTarget as HTMLButtonElement).style.background = BRAND; (e.currentTarget as HTMLButtonElement).style.color = "#fff"; }}
-                  onMouseLeave={e => { (e.currentTarget as HTMLButtonElement).style.background = "transparent"; (e.currentTarget as HTMLButtonElement).style.color = BRAND; }}
-                >
-                  <Icon name="FileText" size={15} />
-                  Запросить КП
-                </button>
+              {/* Корзина */}
+              <a href="#order" className="relative flex h-9 w-9 items-center justify-center text-neutral-600 hover:text-[#F25A29] transition-colors">
+                <Icon name="ShoppingCart" size={20} />
+                <span className="absolute -right-1 -top-1 flex h-4 w-4 items-center justify-center rounded-full text-[10px] font-bold text-white" style={{ background: BRAND }}>0</span>
               </a>
             </div>
           </div>
 
-          {/* Нижняя строка категорий с дропдаунами */}
-          <div className="border-t border-black/6 hidden md:block" style={{ background: "#fcfcfc" }}>
+          {/* Нижняя строка категорий — скрывается при скролле */}
+          <div
+            className="border-t border-black/6 hidden md:block"
+            style={{
+              background: "#fcfcfc",
+              maxHeight: scrolled ? 0 : 48,
+              overflow: "hidden",
+              transition: "max-height 0.3s ease",
+            }}
+          >
             <div className="mx-auto flex max-w-7xl items-center px-6">
               {NAV_CATEGORIES.map(({ label, icon, category, items }, i) => (
                 <div
