@@ -91,92 +91,141 @@ export default function TKZLanding() {
     <div className="min-h-screen bg-white text-neutral-950" style={{ fontFamily: "'IBM Plex Sans', sans-serif" }}>
 
       {/* ── HEADER ── */}
-      <header className="sticky top-0 z-50 bg-white shadow-sm">
-        {/* Верхняя строка */}
-        <div className="border-b border-black/8 bg-white">
-          <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-1.5">
-            <nav className="hidden items-center gap-6 text-xs text-neutral-600 md:flex">
-              {[["#about","О компании"],["#production","Производство"],["#quality","Сертификаты"],["#dealers","Дилерам"]].map(([href, label]) => (
-                <a key={href} href={href} className="hover:text-[#F25A29] transition-colors">{label}</a>
+      <header className="sticky top-0 z-50" style={{ fontFamily: "'IBM Plex Sans', sans-serif" }}>
+
+        {/* Верхняя полоса */}
+        <div style={{ background: "#1a1a1a" }}>
+          <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-2">
+            <nav className="hidden items-center gap-1 md:flex">
+              {[["#about","О компании"],["#production","Производство"],["#quality","Сертификаты"],["#dealers","Дилерам"],["#contacts","Контакты"]].map(([href, label]) => (
+                <a key={href} href={href}
+                  className="px-3 py-1 text-xs text-white/60 hover:text-white rounded transition-colors duration-150">
+                  {label}
+                </a>
               ))}
             </nav>
-            <div className="flex items-center gap-5 ml-auto">
-              <a href="#contacts" className="flex items-center gap-1.5 text-xs text-neutral-600 hover:text-[#F25A29] transition-colors">
-                <Icon name="MapPin" size={13} className="text-[#F25A29]" />
-                Тула
+            <div className="flex items-center gap-4 ml-auto">
+              <a href="#contacts" className="flex items-center gap-1.5 text-xs text-white/60 hover:text-white transition-colors">
+                <Icon name="MapPin" size={12} className="text-[#F25A29]" />
+                г. Тула
               </a>
-              <a href="#contacts" className="text-xs font-semibold transition-colors" style={{ color: BRAND }}>
-                Заказать звонок
+              <div className="w-px h-3 bg-white/20" />
+              <a href="tel:+74872000000"
+                className="flex items-center gap-1.5 text-xs font-semibold text-white/80 hover:text-white transition-colors">
+                <Icon name="Phone" size={12} className="text-[#F25A29]" />
+                +7 (4872) 00-00-00
+              </a>
+              <div className="w-px h-3 bg-white/20" />
+              <a href="#contacts"
+                className="text-xs font-semibold px-3 py-1 rounded transition-colors"
+                style={{ color: BRAND }}
+                onMouseEnter={e => (e.currentTarget.style.color = "#ff7a55")}
+                onMouseLeave={e => (e.currentTarget.style.color = BRAND)}>
+                Заказать звонок →
               </a>
             </div>
           </div>
         </div>
 
         {/* Основная строка */}
-        <div className="border-b border-black/8 bg-white">
-          <div className="mx-auto flex max-w-7xl items-center gap-4 px-6 py-3">
+        <div className="bg-white border-b border-black/10" style={{ boxShadow: "0 2px 16px rgba(0,0,0,0.07)" }}>
+          <div className="mx-auto flex max-w-7xl items-center gap-5 px-6 py-3.5">
+
             {/* Логотип */}
-            <a href="/" className="shrink-0">
+            <a href="/" className="shrink-0 mr-1">
               <TKZLogo />
             </a>
 
             {/* Кнопка каталога */}
-            <a href="#catalog">
-              <Button className="flex shrink-0 items-center gap-2 rounded-none px-5 py-3 text-sm font-bold text-white uppercase tracking-wide" style={{ background: BRAND, fontFamily: "'Oswald', sans-serif" }}>
-                <Icon name="Menu" size={16} />
+            <a href="#catalog" className="shrink-0">
+              <button
+                className="flex items-center gap-2.5 px-5 h-12 text-sm font-bold text-white uppercase tracking-widest transition-all duration-150 hover:opacity-90 active:scale-95"
+                style={{ background: BRAND, fontFamily: "'Oswald', sans-serif", letterSpacing: "0.12em" }}
+              >
+                <Icon name="LayoutGrid" size={16} />
                 Каталог
-              </Button>
+              </button>
             </a>
 
             {/* Поиск */}
-            <div className="relative flex-1 max-w-xl">
+            <div className="relative flex-1" style={{ maxWidth: 520 }}>
               <input
-                className="h-11 w-full border border-black/15 bg-white pl-4 pr-11 text-sm outline-none transition-colors focus:border-[#F25A29]"
-                placeholder="Поиск по каталогу"
+                className="h-12 w-full text-sm outline-none transition-all pl-5 pr-14"
+                style={{
+                  border: "1.5px solid #e5e5e5",
+                  borderRadius: 2,
+                  background: "#fafafa",
+                  color: "#111",
+                }}
+                onFocus={e => (e.currentTarget.style.borderColor = BRAND)}
+                onBlur={e => (e.currentTarget.style.borderColor = "#e5e5e5")}
+                placeholder="Поиск по каталогу: ВВГ 3х2,5, ПВС..."
               />
-              <button className="absolute right-0 top-0 flex h-11 w-11 items-center justify-center border-l border-black/15 text-neutral-500 hover:text-[#F25A29] transition-colors">
+              <button
+                className="absolute right-0 top-0 h-12 w-12 flex items-center justify-center text-white transition-opacity hover:opacity-90"
+                style={{ background: BRAND, borderRadius: "0 2px 2px 0" }}
+              >
                 <Icon name="Search" size={17} />
               </button>
             </div>
 
-            {/* Телефон и корзина */}
-            <div className="ml-auto hidden shrink-0 items-center gap-5 md:flex">
-              <div className="text-right">
-                <div className="text-lg font-black text-neutral-950" style={{ fontFamily: "'Oswald', sans-serif", letterSpacing: "-0.02em" }}>
+            {/* Правый блок */}
+            <div className="ml-auto flex shrink-0 items-center gap-6">
+              {/* Телефон */}
+              <div className="hidden lg:block text-right">
+                <a href="tel:+74872000000"
+                  className="block text-xl font-black text-neutral-950 hover:text-[#F25A29] transition-colors leading-tight"
+                  style={{ fontFamily: "'Oswald', sans-serif", letterSpacing: "-0.01em" }}>
                   +7 (4872) 00-00-00
-                </div>
-                <a href="mailto:info@tkz-tula.ru" className="text-xs transition-colors hover:text-[#F25A29]" style={{ color: BRAND }}>
+                </a>
+                <a href="mailto:info@tkz-tula.ru"
+                  className="text-xs transition-colors"
+                  style={{ color: BRAND }}>
                   info@tkz-tula.ru
                 </a>
               </div>
-              <a href="#order" className="relative flex h-10 w-10 items-center justify-center rounded-full border border-black/15 text-neutral-600 hover:border-[#F25A29] hover:text-[#F25A29] transition-colors">
-                <Icon name="ShoppingCart" size={18} />
-                <span className="absolute -right-1 -top-1 flex h-4 w-4 items-center justify-center rounded-full text-[10px] font-bold text-white" style={{ background: BRAND }}>0</span>
+
+              {/* Разделитель */}
+              <div className="hidden lg:block w-px h-10 bg-black/10" />
+
+              {/* Кнопка заявки */}
+              <a href="#dealers">
+                <button
+                  className="hidden lg:flex items-center gap-2 h-11 px-5 text-sm font-semibold border-2 transition-all duration-150 hover:text-white"
+                  style={{ borderColor: BRAND, color: BRAND, borderRadius: 2 }}
+                  onMouseEnter={e => { (e.currentTarget as HTMLButtonElement).style.background = BRAND; (e.currentTarget as HTMLButtonElement).style.color = "#fff"; }}
+                  onMouseLeave={e => { (e.currentTarget as HTMLButtonElement).style.background = "transparent"; (e.currentTarget as HTMLButtonElement).style.color = BRAND; }}
+                >
+                  <Icon name="FileText" size={15} />
+                  Запросить КП
+                </button>
               </a>
             </div>
           </div>
-        </div>
 
-        {/* Нижняя строка — категории */}
-        <div className="hidden border-b border-black/8 bg-white md:block">
-          <div className="mx-auto flex max-w-7xl items-center gap-0 px-6">
-            {[
-              "Силовые кабели",
-              "Плоские кабели",
-              "Гибкие провода",
-              "Монтажный провод",
-              "Соединительные шнуры",
-              "Спецкабели",
-            ].map((cat) => (
-              <a
-                key={cat}
-                href="#catalog"
-                className="flex items-center gap-1.5 border-r border-black/8 px-4 py-3 text-xs font-medium text-neutral-600 hover:bg-orange-50 hover:text-[#F25A29] transition-colors first:pl-0"
-              >
-                {cat}
-                <Icon name="ChevronDown" size={12} className="text-neutral-400" />
-              </a>
-            ))}
+          {/* Нижняя строка категорий */}
+          <div className="border-t border-black/6 hidden md:block" style={{ background: "#fcfcfc" }}>
+            <div className="mx-auto flex max-w-7xl items-center px-6">
+              {[
+                { label: "Силовые кабели",        icon: "Zap" },
+                { label: "Плоские кабели",         icon: "Layers" },
+                { label: "Гибкие провода",         icon: "Cable" },
+                { label: "Монтажный провод",       icon: "Wrench" },
+                { label: "Соединительные шнуры",   icon: "Link" },
+                { label: "Спецкабели",             icon: "Shield" },
+              ].map(({ label, icon }, i) => (
+                <a
+                  key={label}
+                  href="#catalog"
+                  className="group flex items-center gap-2 px-5 py-2.5 text-xs font-medium text-neutral-600 transition-all duration-150 border-r border-black/6 hover:text-[#F25A29]"
+                  style={i === 0 ? { paddingLeft: 0 } : {}}
+                >
+                  <Icon name={icon} size={13} className="text-neutral-400 group-hover:text-[#F25A29] transition-colors" />
+                  {label}
+                  <Icon name="ChevronDown" size={11} className="text-neutral-300 group-hover:text-[#F25A29] transition-colors ml-0.5" />
+                </a>
+              ))}
+            </div>
           </div>
         </div>
       </header>
