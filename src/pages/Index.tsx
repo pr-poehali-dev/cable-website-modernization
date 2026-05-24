@@ -26,6 +26,69 @@ const catalog = [
 
 const productGroups = ["ВВГнг(А)-LS", "ВВГ-Пнг(А)-LS", "ПВС", "ШВВП", "ПуГВ", "Монтажный провод"];
 
+const NAV_CATEGORIES = [
+  {
+    label: "Силовые кабели",
+    icon: "Zap",
+    category: "Силовой кабель",
+    items: [
+      { name: "ВВГнг(А)-LS 2х1,5", desc: "2 жилы • 1,5 мм²" },
+      { name: "ВВГнг(А)-LS 3х1,5", desc: "3 жилы • 1,5 мм²" },
+      { name: "ВВГнг(А)-LS 2х2,5", desc: "2 жилы • 2,5 мм²" },
+      { name: "ВВГнг(А)-LS 3х2,5", desc: "3 жилы • 2,5 мм²" },
+    ],
+  },
+  {
+    label: "Плоские кабели",
+    icon: "Layers",
+    category: "Плоский кабель",
+    items: [
+      { name: "ВВГ-Пнг(А)-LS 2х1,5", desc: "2 жилы • 1,5 мм² • плоский" },
+      { name: "ВВГ-Пнг(А)-LS 3х1,5", desc: "3 жилы • 1,5 мм² • плоский" },
+      { name: "ВВГ-Пнг(А)-LS 2х2,5", desc: "2 жилы • 2,5 мм² • плоский" },
+      { name: "ВВГ-Пнг(А)-LS 3х2,5", desc: "3 жилы • 2,5 мм² • плоский" },
+    ],
+  },
+  {
+    label: "Гибкие провода",
+    icon: "Cable",
+    category: "Гибкий провод",
+    items: [
+      { name: "ПВС 2х1,5", desc: "2 жилы • 1,5 мм² • гибкий" },
+      { name: "ПВС 3х1,5", desc: "3 жилы • 1,5 мм² • гибкий" },
+      { name: "ПВС 3х2,5", desc: "3 жилы • 2,5 мм² • гибкий" },
+    ],
+  },
+  {
+    label: "Монтажный провод",
+    icon: "Wrench",
+    category: "Монтажный провод",
+    items: [
+      { name: "ПуГВ 1х1,5", desc: "1 жила • 1,5 мм² • гибкий" },
+      { name: "ПуГВ 1х2,5", desc: "1 жила • 2,5 мм² • гибкий" },
+    ],
+  },
+  {
+    label: "Соединительные шнуры",
+    icon: "Link",
+    category: "Соединительный шнур",
+    items: [
+      { name: "ШВВП 2х0,75", desc: "2 жилы • 0,75 мм²" },
+      { name: "ШВВП 2х1,5",  desc: "2 жилы • 1,5 мм²" },
+    ],
+  },
+  {
+    label: "Спецкабели",
+    icon: "Shield",
+    category: null,
+    items: [
+      { name: "Кабели под заказ", desc: "По техническому заданию" },
+      { name: "Огнестойкие кабели", desc: "FR / FRHF исполнение" },
+      { name: "Маслостойкие кабели", desc: "Спецусловия эксплуатации" },
+    ],
+  },
+];
+
 const advantages = [
   { icon: "Factory",     title: "Собственное производство", text: "Волочение, экструзия, намотка и упаковка кабельно-проводниковой продукции на производственной площадке в Туле." },
   { icon: "ShieldCheck", title: "Контроль качества",        text: "Контроль сырья, геометрии, изоляции, маркировки и соответствия продукции требованиям заказчика." },
@@ -66,6 +129,7 @@ export default function TKZLanding() {
   const [activeGroup, setActiveGroup] = useState("Все");
   const [formData, setFormData] = useState({ name: "", phone: "", company: "" });
   const [submitted, setSubmitted] = useState(false);
+  const [openMenu, setOpenMenu] = useState<string | null>(null);
 
   const catalogGroups = useMemo(
     () => ["Все", ...Array.from(new Set(catalog.map((item) => item.category)))],
@@ -203,27 +267,107 @@ export default function TKZLanding() {
             </div>
           </div>
 
-          {/* Нижняя строка категорий */}
+          {/* Нижняя строка категорий с дропдаунами */}
           <div className="border-t border-black/6 hidden md:block" style={{ background: "#fcfcfc" }}>
             <div className="mx-auto flex max-w-7xl items-center px-6">
-              {[
-                { label: "Силовые кабели",        icon: "Zap" },
-                { label: "Плоские кабели",         icon: "Layers" },
-                { label: "Гибкие провода",         icon: "Cable" },
-                { label: "Монтажный провод",       icon: "Wrench" },
-                { label: "Соединительные шнуры",   icon: "Link" },
-                { label: "Спецкабели",             icon: "Shield" },
-              ].map(({ label, icon }, i) => (
-                <a
+              {NAV_CATEGORIES.map(({ label, icon, category, items }, i) => (
+                <div
                   key={label}
-                  href="#catalog"
-                  className="group flex items-center gap-2 px-5 py-2.5 text-xs font-medium text-neutral-600 transition-all duration-150 border-r border-black/6 hover:text-[#F25A29]"
-                  style={i === 0 ? { paddingLeft: 0 } : {}}
+                  className="relative"
+                  onMouseEnter={() => setOpenMenu(label)}
+                  onMouseLeave={() => setOpenMenu(null)}
                 >
-                  <Icon name={icon} size={13} className="text-neutral-400 group-hover:text-[#F25A29] transition-colors" />
-                  {label}
-                  <Icon name="ChevronDown" size={11} className="text-neutral-300 group-hover:text-[#F25A29] transition-colors ml-0.5" />
-                </a>
+                  <button
+                    className="group flex items-center gap-2 px-5 py-3 text-xs font-medium transition-all duration-150 border-r border-black/6"
+                    style={{
+                      paddingLeft: i === 0 ? 0 : undefined,
+                      color: openMenu === label ? BRAND : "#525252",
+                    }}
+                    onClick={() => {
+                      if (category) setActiveGroup(category);
+                      document.getElementById("catalog")?.scrollIntoView({ behavior: "smooth" });
+                      setOpenMenu(null);
+                    }}
+                  >
+                    <Icon name={icon} size={13} style={{ color: openMenu === label ? BRAND : "#aaa" }} />
+                    {label}
+                    <Icon
+                      name="ChevronDown"
+                      size={11}
+                      style={{
+                        color: openMenu === label ? BRAND : "#ccc",
+                        transform: openMenu === label ? "rotate(180deg)" : "rotate(0deg)",
+                        transition: "transform 0.2s",
+                        marginLeft: 2,
+                      }}
+                    />
+                  </button>
+
+                  {/* Дропдаун */}
+                  {openMenu === label && (
+                    <div
+                      className="absolute left-0 top-full z-50 min-w-[260px] overflow-hidden"
+                      style={{
+                        background: "#fff",
+                        boxShadow: "0 8px 32px rgba(0,0,0,0.13)",
+                        border: "1px solid rgba(0,0,0,0.08)",
+                        borderTop: `2px solid ${BRAND}`,
+                        borderRadius: "0 0 6px 6px",
+                        animation: "fade-up 0.15s ease both",
+                      }}
+                    >
+                      {/* Заголовок */}
+                      <div className="px-4 py-3 border-b border-black/6" style={{ background: "#fafafa" }}>
+                        <div className="flex items-center gap-2">
+                          <Icon name={icon} size={14} style={{ color: BRAND }} />
+                          <span className="text-xs font-bold text-neutral-800" style={{ fontFamily: "'Oswald', sans-serif", letterSpacing: "0.04em" }}>
+                            {label.toUpperCase()}
+                          </span>
+                        </div>
+                      </div>
+
+                      {/* Список позиций */}
+                      <div className="py-1">
+                        {items.map((item) => (
+                          <button
+                            key={item.name}
+                            className="w-full flex items-start gap-3 px-4 py-2.5 text-left transition-colors hover:bg-orange-50 group/item"
+                            onClick={() => {
+                              if (category) setActiveGroup(category);
+                              document.getElementById("catalog")?.scrollIntoView({ behavior: "smooth" });
+                              setOpenMenu(null);
+                            }}
+                          >
+                            <Icon name="ArrowRight" size={12} className="mt-0.5 shrink-0 text-neutral-300 group-hover/item:text-[#F25A29] transition-colors" />
+                            <div>
+                              <div className="text-sm font-semibold text-neutral-800 group-hover/item:text-[#F25A29] transition-colors leading-tight" style={{ fontFamily: "'IBM Plex Sans', sans-serif" }}>
+                                {item.name}
+                              </div>
+                              <div className="text-xs text-neutral-400 mt-0.5">{item.desc}</div>
+                            </div>
+                          </button>
+                        ))}
+                      </div>
+
+                      {/* Футер дропдауна */}
+                      <div className="px-4 py-2.5 border-t border-black/6" style={{ background: "#fafafa" }}>
+                        <button
+                          className="text-xs font-semibold flex items-center gap-1.5 transition-colors hover:opacity-80"
+                          style={{ color: BRAND }}
+                          onClick={() => {
+                            if (category) setActiveGroup(category);
+                            else setActiveGroup("Все");
+                            document.getElementById("catalog")?.scrollIntoView({ behavior: "smooth" });
+                            setOpenMenu(null);
+                          }}
+                        >
+                          Все позиции раздела
+                          <Icon name="ArrowRight" size={12} />
+                        </button>
+                      </div>
+                    </div>
+                  )}
+                </div>
               ))}
             </div>
           </div>
