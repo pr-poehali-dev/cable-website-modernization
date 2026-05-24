@@ -53,12 +53,11 @@ function normalizeText(value: string) {
 
 function TKZLogo() {
   return (
-    <div className="relative flex h-14 w-20 items-center justify-center rounded-2xl bg-white shadow-lg ring-1 ring-black/10" aria-label="Логотип ТКЗ">
-      <div className="absolute -left-1 top-2 h-10 w-10 rounded-full border-l-4 border-t-4" style={{ borderColor: BRAND }} />
-      <div className="absolute -right-1 bottom-2 h-10 w-10 rounded-full border-b-4 border-r-4" style={{ borderColor: BRAND }} />
-      <div className="absolute right-2 top-2 h-8 w-8 rounded-full border-r-4 border-t-4 border-neutral-900" />
-      <div className="text-2xl font-black italic tracking-tighter" style={{ color: BRAND, fontFamily: "'Oswald', sans-serif" }}>ТКЗ</div>
-    </div>
+    <img
+      src="https://cdn.poehali.dev/projects/daf4b0d5-e0d0-48a6-94c7-248a64d027d0/bucket/7078d90e-4ce4-40e8-be39-d18583b96837.png"
+      alt="ТКЗ — Тульский Кабельный Завод"
+      className="h-12 w-auto object-contain"
+    />
   );
 }
 
@@ -94,12 +93,8 @@ export default function TKZLanding() {
       {/* ── HEADER ── */}
       <header className="sticky top-0 z-50 border-b border-black/10 bg-white/95 backdrop-blur-xl">
         <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-4">
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-3">
             <TKZLogo />
-            <div>
-              <div className="text-lg font-black tracking-wide" style={{ color: BRAND, fontFamily: "'Oswald', sans-serif" }}>ТКЗ</div>
-              <div className="text-xs text-neutral-500">Тульский Кабельный Завод</div>
-            </div>
           </div>
 
           <nav className="hidden items-center gap-7 text-sm font-medium text-neutral-600 md:flex">
